@@ -17,7 +17,7 @@
       rel="stylesheet"
     />
 
-    <!-- MathJax (robust config) -->
+    <!-- MathJax -->
     <script>
       window.MathJax = {
         tex: {
@@ -42,7 +42,7 @@
     ></script>
 
     <style>
-      /* ===== Pastel Green (hip & minimal) ===== */
+      /* theme + layout 그대로 유지 */
       :root {
         --bg-0: #f8fdf9;
         --bg-1: #eff9f2;
@@ -53,169 +53,36 @@
         --accent: #3ba776;
         --accent-deep: #2f8a63;
         --accent-soft: #c8efd9;
-        --paper: #ffffff;
-      }
-      html,
-      body {
-        height: 100%;
+        --paper: #fff;
       }
       body {
-        font-family: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI,
-          Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Noto Sans",
-          sans-serif;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: linear-gradient(160deg, var(--bg-0), var(--bg-1));
         color: var(--ink);
-        background: linear-gradient(160deg, var(--bg-0) 0%, var(--bg-1) 100%);
-        position: relative;
-        overflow-x: hidden;
       }
-      /* soft blobs */
-      body::before,
-      body::after {
-        content: "";
-        position: fixed;
-        border-radius: 50%;
-        filter: blur(60px) saturate(120%);
-        z-index: -1;
-        pointer-events: none;
-      }
-      body::before {
-        width: 48vmax;
-        height: 48vmax;
-        right: -12vmax;
-        top: -8vmax;
-        background: radial-gradient(
-          closest-side,
-          var(--blob-1),
-          transparent 70%
-        );
-        opacity: 0.5;
-      }
-      body::after {
-        width: 40vmax;
-        height: 40vmax;
-        left: -10vmax;
-        bottom: -12vmax;
-        background: radial-gradient(
-          closest-side,
-          var(--blob-2),
-          transparent 70%
-        );
-        opacity: 0.45;
-      }
-
-      .sidebar {
-        min-height: 100vh;
-        position: sticky;
-        top: 0;
-        padding: 2rem 0;
-      }
-      .content {
-        padding: 2rem 0 4rem;
-      }
-
       .sheet {
-        background: color-mix(in oklab, var(--paper) 88%, #fff0);
+        background: #fff;
         border: 1px solid var(--accent-soft);
         border-radius: 20px;
         box-shadow: 0 12px 30px rgba(47, 138, 99, 0.08);
-        backdrop-filter: saturate(140%) blur(2px);
       }
-
       h1,
       h2,
       h3 {
         color: var(--accent-deep);
       }
-      h1 {
-        font-weight: 800;
-        letter-spacing: 0.2px;
-      }
-      .lead-muted {
-        color: var(--muted);
-      }
-
-      .sheet > .h3,
-      .sheet h2.h3 {
-        position: relative;
-        padding-bottom: 0.25rem;
-        margin-bottom: 1rem;
-      }
-      .sheet > .h3::after,
-      .sheet h2.h3::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -0.35rem;
-        width: 80px;
-        height: 4px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, var(--accent) 0%, #9fe6bf 100%);
-        opacity: 0.65;
-      }
-
-      /* TOC */
       .toc {
         background: #ffffffcc;
         border: 1px solid var(--accent-soft);
         border-radius: 18px;
-        padding: 1.1rem 1.25rem;
-        box-shadow: 0 8px 24px rgba(47, 138, 99, 0.06);
-        backdrop-filter: saturate(140%) blur(2px);
+        padding: 1.1rem;
       }
-      .toc .badge-topic {
-        background: linear-gradient(90deg, var(--accent) 0%, #7ed9a7 100%);
-        border: none;
-      }
-      .toc ul {
-        list-style: none;
-        margin: 0;
-        padding-left: 0.25rem;
-      }
-      .toc li {
-        position: relative;
-        padding-left: 1.1rem;
-        margin: 0.35rem 0;
-      }
-      .toc li::before {
-        content: "";
-        position: absolute;
-        left: 0.15rem;
-        top: 0.58rem;
-        width: 7px;
-        height: 7px;
-        border-radius: 3px;
-        background: var(--accent);
-        box-shadow: 0 0 0 4px rgba(59, 167, 118, 0.12);
-      }
-      .toc li::after {
-        content: "";
-        position: absolute;
-        left: 0.5rem;
-        top: -0.6rem;
-        width: 1px;
-        height: 1.35rem;
-        background: linear-gradient(var(--accent), transparent);
-        opacity: 0.25;
-      }
-      .toc > ul > li:first-child::after {
-        display: none;
-      }
-      .toc a {
-        text-decoration: none;
-        color: #294138;
-      }
-      .toc a:hover {
-        color: #000;
-        text-decoration: underline;
-      }
-
       .callout {
         border-left: 5px solid var(--accent);
         background: #f2fbf6;
         padding: 0.8rem 1rem;
         border-radius: 12px;
       }
-
       .vs {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -231,49 +98,15 @@
         }
         .sidebar {
           position: static;
-          min-height: auto;
         }
       }
-
-      .sc {
-        font-variant: small-caps;
-        letter-spacing: 0.5px;
-        color: #6f877b;
-      }
-
-      /* prevent formula clipping; print-friendly */
+      /* 수식 안정화 */
       mjx-container[display="true"] {
         display: block;
         overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 0.25rem;
-      }
-      mjx-container[display="true"] svg {
-        display: block;
+        padding: 0.25rem 0;
       }
       @media print {
-        body {
-          background: #fff !important;
-        }
-        body::before,
-        body::after {
-          display: none !important;
-        }
-        .sidebar {
-          display: none;
-        }
-        .content {
-          padding: 0;
-        }
-        .sheet {
-          box-shadow: none;
-          border: 1px solid #ddd;
-          border-radius: 10px;
-        }
-        a[href]:after {
-          content: "";
-        }
         mjx-container[display="true"] {
           overflow: visible !important;
         }
@@ -286,25 +119,21 @@
         <!-- Sidebar -->
         <aside class="col-lg-3 sidebar">
           <div class="toc">
-            <div class="mb-2">
-              <span class="badge text-light badge-topic"
-                >Topic 4.5 · Computer Graphics</span
-              >
-            </div>
-            <strong class="sc">Contents</strong>
+            <span class="badge text-light" style="background: var(--accent)"
+              >Topic 4.5 · Computer Graphics</span
+            >
             <ul class="mt-2">
-              <li><a href="#cover">Cover</a></li>
               <li><a href="#overview">Overview</a></li>
               <li><a href="#goals">Learning Goals</a></li>
-              <li><a href="#prep">Coordinates &amp; Homogeneous Form</a></li>
+              <li><a href="#prep">Coordinates & Homogeneous Form</a></li>
               <li><a href="#2d3d">2D vs 3D Transformations</a></li>
               <li><a href="#ex2d">Worked Example · 2D</a></li>
               <li><a href="#ex3d">Worked Example · 3D</a></li>
               <li><a href="#proj">Orthographic vs Perspective</a></li>
               <li><a href="#pitfalls">Common Pitfalls</a></li>
               <li><a href="#conclusion">Conclusion</a></li>
-              <li><a href="#refs">References (IEEE)</a></li>
-              <li><a href="#rubric">Rubric Mapping Checklist</a></li>
+              <li><a href="#refs">References</a></li>
+              <li><a href="#rubric">Rubric Checklist</a></li>
             </ul>
           </div>
         </aside>
@@ -312,58 +141,43 @@
         <!-- Main -->
         <main class="col-lg-9 content">
           <!-- Cover -->
-          <section id="cover" class="sheet p-4 p-md-5 mb-4">
-            <div
-              class="d-flex justify-content-between align-items-start flex-wrap"
-            >
-              <div>
-                <h1 class="mb-1">
-                  Applications of Linear Algebra to Computer Graphics
-                </h1>
-                <p class="lead lead-muted mb-2">
-                  2D &amp; 3D Transformations · Composition · Projections
-                </p>
-                <div class="small sc">
-                  SIT292 – Enrichment Task 2 (Topic 4.5)
-                </div>
-              </div>
-              <div class="text-end">
-                <div class="fw-semibold">Eunjin Kim</div>
-                <div class="text-muted">
-                  Student ID:
-                  <span style="border-bottom: 1px dotted #a8d8bf"
-                    >223715707</span
-                  >
-                </div>
-                <div class="text-muted">Trimester: T2 2025</div>
-              </div>
-            </div>
+          <section class="sheet p-4 mb-4" id="cover">
+            <h1>Applications of Linear Algebra to Computer Graphics</h1>
+            <p class="lead">
+              2D & 3D Transformations · Composition · Projections
+            </p>
+            <p class="sc">SIT292 – Enrichment Task 2 (Topic 4.5)</p>
+            <p>
+              <b>Eunjin Kim</b><br />Student ID: 223715707<br />Trimester: T2
+              2025
+            </p>
           </section>
 
           <!-- Overview -->
-          <section id="overview" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">Overview</h2>
+          <section class="sheet p-4 mb-4" id="overview">
+            <h2>Overview</h2>
             <p>
-              Linear transformations move points between frames. Matrices handle
-              translation, rotation, scaling, and projection. Homogeneous
-              coordinates let us express every step as a matrix product and
-              compose them cleanly.
+              Linear transformations reposition points across coordinate frames.
+              Using matrices, we can perform translation, rotation, scaling, and
+              projection in a unified manner. Homogeneous coordinates allow all
+              these operations to be expressed as matrix multiplication, making
+              composition straightforward.
             </p>
-            <div class="callout mt-3">
-              <strong>Key idea.</strong> Use homogeneous matrices so chaining
-              transforms is just multiplication. Order matters.
+            <div class="callout">
+              <b>Core Principle:</b> Use homogeneous matrices so that chaining
+              transformations reduces to multiplication. The order is crucial.
             </div>
           </section>
 
           <!-- Goals -->
-          <section id="goals" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">Learning Goals</h2>
-            <ul class="mb-0">
+          <section class="sheet p-4 mb-4" id="goals">
+            <h2>Learning Goals</h2>
+            <ul>
               <li>Explain coordinate frames and homogeneous coordinates.</li>
-              <li>Compare 2D and 3D transforms and the effect of order.</li>
               <li>
-                Compute numeric compositions on sample shapes (worked examples).
+                Compare 2D and 3D transformations and analyze order effects.
               </li>
+              <li>Work through complete numeric examples in 2D and 3D.</li>
               <li>
                 Contrast orthographic and perspective projection with matrix
                 forms.
@@ -372,235 +186,104 @@
           </section>
 
           <!-- Prep -->
-          <section id="prep" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">Coordinates &amp; Homogeneous Form</h2>
+          <section class="sheet p-4 mb-4" id="prep">
+            <h2>Coordinates & Homogeneous Form</h2>
             <p>
-              Represent 2D points as $(x,y)$ and 3D points as $(x,y,z)$. For
-              translation as a matrix multiply, use $(x,y,1)$ and $(x,y,z,1)$.
+              2D points: $(x,y) \to (x,y,1)$; 3D points: $(x,y,z) \to
+              (x,y,z,1)$.
             </p>
-            <div class="row g-3">
-              <div class="col-md">
-                <div class="p-3 bg-white border rounded-4">
-                  <div class="fw-semibold mb-1">2D transforms</div>
-                  <div class="small">
-                    Rotation by $\theta$, scaling $(s_x,s_y)$, translation
-                    $(t_x,t_y)$:
-                  </div>
-                  <p class="mb-0">
-                    \[ R(\theta)=\begin{bmatrix}\cos\theta&-\sin\theta&0\\
-                    \sin\theta&\cos\theta&0\\ 0&0&1\end{bmatrix},\quad
-                    S=\begin{bmatrix}s_x&0&0\\0&s_y&0\\0&0&1\end{bmatrix},\quad
-                    T=\begin{bmatrix}1&0&t_x\\0&1&t_y\\0&0&1\end{bmatrix}. \]
-                  </p>
-                </div>
-              </div>
-              <div class="col-md">
-                <div class="p-3 bg-white border rounded-4">
-                  <div class="fw-semibold mb-1">3D transforms</div>
-                  <div class="small">
-                    Rotation about $z$ (similar for $x,y$), translation
-                    $(t_x,t_y,t_z)$:
-                  </div>
-                  <p class="mb-0">
-                    \[ R_z(\theta)=\begin{bmatrix}\cos\theta&-\sin\theta&0&0\\
-                    \sin\theta&\cos\theta&0&0\\ 0&0&1&0\\
-                    0&0&0&1\end{bmatrix},\quad
-                    T=\begin{bmatrix}1&0&0&t_x\\0&1&0&t_y\\0&0&1&t_z\\0&0&0&1\end{bmatrix}.
-                    \]
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 2D vs 3D -->
-          <section id="2d3d" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">2D vs 3D Transformations</h2>
-            <div class="vs">
-              <div class="p-3 bg-white">
-                <div class="fw-semibold mb-1">2D pipeline</div>
-                <ul class="mb-0">
-                  <li>Use $3\\times3$ matrices on $(x,y,1)$.</li>
-                  <li>
-                    Common order: $T\\,S\\,R$ (translate after rotate/scale).
-                  </li>
-                  <li>Good for UI, sprites, maps.</li>
-                </ul>
-              </div>
-              <div class="p-3 bg-white">
-                <div class="fw-semibold mb-1">3D pipeline</div>
-                <ul class="mb-0">
-                  <li>Use $4\\times4$ matrices on $(x,y,z,1)$.</li>
-                  <li>Include camera transforms and projection.</li>
-                  <li>Z-depth affects perspective scaling.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="callout mt-3">
-              <strong>Order matters.</strong> $TSR \\ne RTS$. Rotating after
-              translating spins around a different center.
-            </div>
-          </section>
-
-          <!-- Worked 2D -->
-          <section id="ex2d" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">
-              Worked Example · 2D (Rotation → Scale → Translation)
-            </h2>
-            <p class="mb-2">
-              Triangle $P(0,0)$, $Q(2,0)$, $R(0,1)$. Apply $\theta=30^{\circ}$,
-              $S=\mathrm{diag}(2,0.5)$, then $t=(3,1)$. Using the column-vector
-              convention, we have \(M=T\,S\,R\).
-            </p>
-            <p class="mb-1">
-              With \(\cos 30^{\circ}=\tfrac{\sqrt{3}}{2}\approx0.866\) and
-              \(\sin 30^{\circ}=0.5\):
-            </p>
-
-            <p class="mb-0">
-              \[ R=\begin{bmatrix} 0.866 & -0.5 & 0\\ 0.5 & 0.866 & 0\\ 0 & 0 &
-              1 \end{bmatrix},\quad S=\begin{bmatrix} 2 & 0 & 0\\ 0 & 0.5 & 0\\
-              0 & 0 & 1 \end{bmatrix},\quad T=\begin{bmatrix} 1 & 0 & 3\\ 0 & 1
-              & 1\\ 0 & 0 & 1 \end{bmatrix}. \]
-            </p>
-
-            <p class="mb-2">
-              \[ S\,R= \begin{bmatrix} 1.732 & -1.000 & 0\\ 0.250 & 0.433 & 0\\
-              0 & 0 & 1 \end{bmatrix}, \quad M=T(SR)= \begin{bmatrix} 1.732 &
-              -1.000 & 3\\ 0.250 & 0.433 & 1\\ 0 & 0 & 1 \end{bmatrix}. \]
-            </p>
-
-            <div class="row g-3">
-              <div class="col-md">
-                <div class="p-3 bg-white border rounded-4">
-                  <div class="fw-semibold mb-1">Transforming points</div>
-                  <p class="mb-0 small">
-                    \(P'=(3,1)\)<br />
-                    \(Q' \approx (6.464,\,1.5)\)<br />
-                    \(R' \approx (2,\,1.433)\)
-                  </p>
-                </div>
-              </div>
-              <div class="col-md">
-                <div class="p-3 bg-white border rounded-4">
-                  <div class="fw-semibold mb-1">What changed?</div>
-                  <ul class="mb-0 small">
-                    <li>
-                      Rotation tilts; scale stretches \(x\) and shrinks \(y\).
-                    </li>
-                    <li>Translation shifts by \((3,1)\).</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Worked 3D -->
-          <section id="ex3d" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">
-              Worked Example · 3D (Rotate about \(z\) then Translate)
-            </h2>
             <p>
-              Point \(A(1,0,2)\). Apply \(R_z(45^{\circ})\) then \(T=(1,2,3)\).
-              With
-              \(\cos45^{\circ}=\sin45^{\circ}=\tfrac{\sqrt{2}}{2}\approx0.7071\):
+              With this embedding, translations also become matrix
+              multiplications.
             </p>
+          </section>
 
-            <p class="mb-0">
-              \[ R_z= \begin{bmatrix} 0.7071 & -0.7071 & 0 & 0\\ 0.7071 & 0.7071
-              & 0 & 0\\ 0 & 0 & 1 & 0\\ 0 & 0 & 0 & 1 \end{bmatrix}, \quad T=
-              \begin{bmatrix} 1 & 0 & 0 & 1\\ 0 & 1 & 0 & 2\\ 0 & 0 & 1 & 3\\ 0
-              & 0 & 0 & 1 \end{bmatrix}, \quad M=T\,R_z= \begin{bmatrix} 0.7071
-              & -0.7071 & 0 & 1\\ 0.7071 & 0.7071 & 0 & 2\\ 0 & 0 & 1 & 3\\ 0 &
-              0 & 0 & 1 \end{bmatrix}. \]
+          <!-- Worked Examples (2D) -->
+          <section class="sheet p-4 mb-4" id="ex2d">
+            <h2>Worked Example · 2D</h2>
+            <p>
+              Triangle $P(0,0), Q(2,0), R(0,1)$. Apply rotation
+              $\theta=30^\circ$, scale $\text{diag}(2,0.5)$, then translation
+              $(3,1)$. Using column-vector convention: $M = T S R$.
             </p>
-            <p>\(A' = M[1,0,2,1]^T = (1.7071,\,2.7071,\,5,\,1)\).</p>
+            \[ R =
+            \begin{bmatrix}0.866&-0.5&0\\0.5&0.866&0\\0&0&1\end{bmatrix},\;
+            S=\begin{bmatrix}2&0&0\\0&0.5&0\\0&0&1\end{bmatrix},\;
+            T=\begin{bmatrix}1&0&3\\0&1&1\\0&0&1\end{bmatrix} \] \[
+            SR=\begin{bmatrix}1.732&-1&0\\0.25&0.433&0\\0&0&1\end{bmatrix},\;
+            M=TSR=\begin{bmatrix}1.732&-1&3\\0.25&0.433&1\\0&0&1\end{bmatrix} \]
+            <p>
+              Transformed points: $P'=(3,1), Q'\approx(6.464,1.5),
+              R'\approx(2,1.433)$.
+            </p>
+          </section>
+
+          <!-- Worked Examples (3D) -->
+          <section class="sheet p-4 mb-4" id="ex3d">
+            <h2>Worked Example · 3D</h2>
+            <p>
+              Point $A(1,0,2)$. Rotate about $z$ by $45^\circ$ then translate
+              $(1,2,3)$. With $\cos45^\circ=\sin45^\circ=0.7071$:
+            </p>
+            \[
+            R_z=\begin{bmatrix}0.7071&-0.7071&0&0\\0.7071&0.7071&0&0\\0&0&1&0\\0&0&0&1\end{bmatrix},\;
+            T=\begin{bmatrix}1&0&0&1\\0&1&0&2\\0&0&1&3\\0&0&0&1\end{bmatrix} \]
+            \[
+            M=TR_z=\begin{bmatrix}0.7071&-0.7071&0&1\\0.7071&0.7071&0&2\\0&0&1&3\\0&0&0&1\end{bmatrix}
+            \]
+            <p>Result: $A'=(1.7071,\,2.7071,\,5,\,1)$.</p>
           </section>
 
           <!-- Projections -->
-          <section id="proj" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">Orthographic vs Perspective Projection</h2>
+          <section class="sheet p-4 mb-4" id="proj">
+            <h2>Orthographic vs Perspective</h2>
             <div class="vs">
-              <div class="p-3 bg-white">
-                <div class="fw-semibold">Orthographic (parallel)</div>
-                <p class="small mb-2">
-                  Drops \(z\); objects keep size regardless of depth.
-                </p>
-                <p class="mb-0">
-                  \[ P_{\text{ortho}}= \begin{bmatrix} 1&0&0&0\\ 0&1&0&0\\
-                  0&0&0&0\\ 0&0&0&1 \end{bmatrix}, \quad (x,y,z,1)^T \mapsto
-                  (x,y,0,1)^T. \]
-                </p>
+              <div>
+                <b>Orthographic</b><br />
+                \[
+                P_{ortho}=\begin{bmatrix}1&0&0&0\\0&1&0&0\\0&0&0&0\\0&0&0&1\end{bmatrix}
+                \]<br />
+                $(x,y,z,1)\mapsto(x,y,0,1)$
               </div>
-              <div class="p-3 bg-white">
-                <div class="fw-semibold">Perspective (pinhole)</div>
-                <p class="small mb-2">
-                  Distant objects appear smaller. With focal length \(f\) and
-                  homogeneous divide:
-                </p>
-                <p class="mb-0">
-                  \[ \begin{aligned} P_{\text{persp}} &= \begin{bmatrix}
-                  f&0&0&0\\ 0&f&0&0\\ 0&0&1&0\\ 0&0&1&0 \end{bmatrix},\\[4pt] v'
-                  &= P_{\text{persp}}[x,y,z,1]^T = (f x,\; f y,\; z,\;
-                  z),\\[2pt] (x',y') &= \left(\frac{f x}{z},\; \frac{f
-                  y}{z}\right). \end{aligned} \]
-                </p>
-              </div>
-            </div>
-
-            <div class="row g-3 mt-2">
-              <div class="col-md">
-                <div class="p-3 bg-white border rounded-4">
-                  <div class="fw-semibold mb-1">Numeric contrast</div>
-                  <p class="small mb-0">
-                    Points \(B(1,0,2)\) and \(C(1,0,4)\) with \(f=2\). Ortho:
-                    both \((1,0)\).<br />
-                    Perspective: \(B\to(1,0)\), \(C\to(0.5,0)\) — depth halves
-                    apparent \(x\).
-                  </p>
-                </div>
-              </div>
-              <div class="col-md">
-                <div class="p-3 bg-white border rounded-4">
-                  <div class="fw-semibold mb-1">Takeaway</div>
-                  <ul class="small mb-0">
-                    <li>Orthographic preserves sizes (CAD, UI, grids).</li>
-                    <li>Perspective mimics vision (realistic 3D scenes).</li>
-                  </ul>
-                </div>
+              <div>
+                <b>Perspective</b><br />
+                \[
+                P_{persp}=\begin{bmatrix}f&0&0&0\\0&f&0&0\\0&0&1&0\\0&0&1&0\end{bmatrix}
+                \]<br />
+                $(x',y')=(fx/z, fy/z)$
               </div>
             </div>
           </section>
 
           <!-- Pitfalls -->
-          <section id="pitfalls" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">Common Pitfalls</h2>
-            <ul class="mb-0">
-              <li>Order reversed (e.g., \(RTS\) instead of \(TSR\)).</li>
-              <li>Mixing row- vs column-vector conventions.</li>
-              <li>Forgetting the homogeneous divide in perspective.</li>
-              <li>Degrees vs radians (in code).</li>
+          <section class="sheet p-4 mb-4" id="pitfalls">
+            <h2>Common Pitfalls</h2>
+            <ul>
+              <li>Incorrect order ($TSR\neq RTS$).</li>
+              <li>Mixing row/column convention.</li>
+              <li>Omitting homogeneous divide in perspective.</li>
+              <li>Degrees vs radians in code.</li>
             </ul>
           </section>
 
           <!-- Conclusion -->
-          <section id="conclusion" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">Conclusion</h2>
-            <p class="mb-0">
-              Matrix algebra unifies motion and camera models. Homogeneous
-              coordinates let us translate with matrices and compose steps into
-              one product. Orthographic and perspective projections complete the
-              pipeline by mapping 3D to 2D for different goals.
+          <section class="sheet p-4 mb-4" id="conclusion">
+            <h2>Conclusion</h2>
+            <p>
+              Matrix algebra provides a unified language for motion and camera
+              models. Homogeneous coordinates extend matrices to include
+              translation, while projections (orthographic vs perspective)
+              bridge 3D and 2D, serving different visualization goals.
             </p>
           </section>
 
           <!-- References -->
-          <section id="refs" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">References (IEEE style)</h2>
-            <ol class="mb-0">
+          <section class="sheet p-4 mb-4" id="refs">
+            <h2>References (IEEE)</h2>
+            <ol>
               <li>
                 W. K. Nicholson, <i>Linear Algebra with Applications</i>, 7th
-                ed. McGraw-Hill, 2015, ch. 4.5.
+                ed. McGraw-Hill, 2015.
               </li>
               <li>
                 J. D. Foley, A. van Dam, S. K. Feiner, and J. F. Hughes,
@@ -610,7 +293,7 @@
               <li>
                 E. Lengyel,
                 <i>Mathematics for 3D Game Programming and Computer Graphics</i
-                >, 3rd ed. Course Technology, 2011.
+                >, 3rd ed., Course Technology, 2011.
               </li>
               <li>
                 T. Akenine-Möller, E. Haines, and N. Hoffman,
@@ -620,31 +303,8 @@
           </section>
 
           <!-- Rubric -->
-          <section id="rubric" class="sheet p-4 p-md-5 mb-4">
-            <h2 class="h3">Rubric Mapping Checklist</h2>
-            <ul class="mb-0">
-              <li>
-                <span class="sc">Clarity:</span> student-friendly tone; key
-                terms defined.
-              </li>
-              <li>
-                <span class="sc">Worked examples:</span> full numeric steps (2D
-                &amp; 3D).
-              </li>
-              <li>
-                <span class="sc">Application:</span> orthographic vs perspective
-                included.
-              </li>
-              <li>
-                <span class="sc">Structure:</span> self-contained; TOC;
-                references.
-              </li>
-            </ul>
-          </section>
         </main>
       </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
