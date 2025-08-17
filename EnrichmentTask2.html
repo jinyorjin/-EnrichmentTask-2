@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIT292 – Enrichment Task 2 | Computer Graphics (4.5)</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- MathJax -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"],
+          ],
+          processEscapes: true,
+          processEnvironments: true,
+          packages: { "[+]": ["ams"] },
+        },
+        svg: { fontCache: "global" },
+      };
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+
+    <style>
+      /* theme + layout 그대로 유지 */
+      :root {
+        --bg-0: #f8fdf9;
+        --bg-1: #eff9f2;
+        --blob-1: #d9f5e6;
+        --blob-2: #e9fff5;
+        --ink: #1c2b22;
+        --muted: #5a6e63;
+        --accent: #3ba776;
+        --accent-deep: #2f8a63;
+        --accent-soft: #c8efd9;
+        --paper: #fff;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: linear-gradient(160deg, var(--bg-0), var(--bg-1));
+        color: var(--ink);
+      }
+      .sheet {
+        background: #fff;
+        border: 1px solid var(--accent-soft);
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(47, 138, 99, 0.08);
+      }
+      h1,
+      h2,
+      h3 {
+        color: var(--accent-deep);
+      }
+      .toc {
+        background: #ffffffcc;
+        border: 1px solid var(--accent-soft);
+        border-radius: 18px;
+        padding: 1.1rem;
+      }
+      .callout {
+        border-left: 5px solid var(--accent);
+        background: #f2fbf6;
+        padding: 0.8rem 1rem;
+        border-radius: 12px;
+      }
+      .vs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .vs > div {
+        border: 1px dashed var(--accent-soft);
+        border-radius: 14px;
+      }
+      @media (max-width: 991px) {
+        .vs {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          position: static;
+        }
+      }
+      /* 수식 안정화 */
+      mjx-container[display="true"] {
+        display: block;
+        overflow-x: auto;
+        padding: 0.25rem 0;
+      }
+      @media print {
+        mjx-container[display="true"] {
+          overflow: visible !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-xxl">
+      <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-lg-3 sidebar">
+          <div class="toc">
+            <span class="badge text-light" style="background: var(--accent)"
+              >Topic 4.5 · Computer Graphics</span
+            >
+            <ul class="mt-2">
+              <li><a href="#overview">Overview</a></li>
+              <li><a href="#goals">Learning Goals</a></li>
+              <li><a href="#prep">Coordinates & Homogeneous Form</a></li>
+              <li><a href="#2d3d">2D vs 3D Transformations</a></li>
+              <li><a href="#ex2d">Worked Example · 2D</a></li>
+              <li><a href="#ex3d">Worked Example · 3D</a></li>
+              <li><a href="#proj">Orthographic vs Perspective</a></li>
+              <li><a href="#pitfalls">Common Pitfalls</a></li>
+              <li><a href="#conclusion">Conclusion</a></li>
+              <li><a href="#refs">References</a></li>
+              <li><a href="#rubric">Rubric Checklist</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="col-lg-9 content">
+          <!-- Cover -->
+          <section class="sheet p-4 mb-4" id="cover">
+            <h1>Applications of Linear Algebra to Computer Graphics</h1>
+            <p class="lead">
+              2D & 3D Transformations · Composition · Projections
+            </p>
+            <p class="sc">SIT292 – Enrichment Task 2 (Topic 4.5)</p>
+            <p>
+              <b>Eunjin Kim</b><br />Student ID: 223715707<br />Trimester: T2
+              2025
+            </p>
+          </section>
+
+          <!-- Overview -->
+          <section class="sheet p-4 mb-4" id="overview">
+            <h2>Overview</h2>
+            <p>
+              Linear transformations reposition points across coordinate frames.
+              Using matrices, we can perform translation, rotation, scaling, and
+              projection in a unified manner. Homogeneous coordinates allow all
+              these operations to be expressed as matrix multiplication, making
+              composition straightforward.
+            </p>
+            <div class="callout">
+              <b>Core Principle:</b> Use homogeneous matrices so that chaining
+              transformations reduces to multiplication. The order is crucial.
+            </div>
+          </section>
+
+          <!-- Goals -->
+          <section class="sheet p-4 mb-4" id="goals">
+            <h2>Learning Goals</h2>
+            <ul>
+              <li>Explain coordinate frames and homogeneous coordinates.</li>
+              <li>
+                Compare 2D and 3D transformations and analyze order effects.
+              </li>
+              <li>Work through complete numeric examples in 2D and 3D.</li>
+              <li>
+                Contrast orthographic and perspective projection with matrix
+                forms.
+              </li>
+            </ul>
+          </section>
+
+          <!-- Prep -->
+          <section class="sheet p-4 mb-4" id="prep">
+            <h2>Coordinates & Homogeneous Form</h2>
+            <p>
+              2D points: $(x,y) \to (x,y,1)$; 3D points: $(x,y,z) \to
+              (x,y,z,1)$.
+            </p>
+            <p>
+              With this embedding, translations also become matrix
+              multiplications.
+            </p>
+          </section>
+
+          <!-- Worked Examples (2D) -->
+          <section class="sheet p-4 mb-4" id="ex2d">
+            <h2>Worked Example · 2D</h2>
+            <p>
+              Triangle $P(0,0), Q(2,0), R(0,1)$. Apply rotation
+              $\theta=30^\circ$, scale $\text{diag}(2,0.5)$, then translation
+              $(3,1)$. Using column-vector convention: $M = T S R$.
+            </p>
+            \[ R =
+            \begin{bmatrix}0.866&-0.5&0\\0.5&0.866&0\\0&0&1\end{bmatrix},\;
+            S=\begin{bmatrix}2&0&0\\0&0.5&0\\0&0&1\end{bmatrix},\;
+            T=\begin{bmatrix}1&0&3\\0&1&1\\0&0&1\end{bmatrix} \] \[
+            SR=\begin{bmatrix}1.732&-1&0\\0.25&0.433&0\\0&0&1\end{bmatrix},\;
+            M=TSR=\begin{bmatrix}1.732&-1&3\\0.25&0.433&1\\0&0&1\end{bmatrix} \]
+            <p>
+              Transformed points: $P'=(3,1), Q'\approx(6.464,1.5),
+              R'\approx(2,1.433)$.
+            </p>
+          </section>
+
+          <!-- Worked Examples (3D) -->
+          <section class="sheet p-4 mb-4" id="ex3d">
+            <h2>Worked Example · 3D</h2>
+            <p>
+              Point $A(1,0,2)$. Rotate about $z$ by $45^\circ$ then translate
+              $(1,2,3)$. With $\cos45^\circ=\sin45^\circ=0.7071$:
+            </p>
+            \[
+            R_z=\begin{bmatrix}0.7071&-0.7071&0&0\\0.7071&0.7071&0&0\\0&0&1&0\\0&0&0&1\end{bmatrix},\;
+            T=\begin{bmatrix}1&0&0&1\\0&1&0&2\\0&0&1&3\\0&0&0&1\end{bmatrix} \]
+            \[
+            M=TR_z=\begin{bmatrix}0.7071&-0.7071&0&1\\0.7071&0.7071&0&2\\0&0&1&3\\0&0&0&1\end{bmatrix}
+            \]
+            <p>Result: $A'=(1.7071,\,2.7071,\,5,\,1)$.</p>
+          </section>
+
+          <!-- Projections -->
+          <section class="sheet p-4 mb-4" id="proj">
+            <h2>Orthographic vs Perspective</h2>
+            <div class="vs">
+              <div>
+                <b>Orthographic</b><br />
+                \[
+                P_{ortho}=\begin{bmatrix}1&0&0&0\\0&1&0&0\\0&0&0&0\\0&0&0&1\end{bmatrix}
+                \]<br />
+                $(x,y,z,1)\mapsto(x,y,0,1)$
+              </div>
+              <div>
+                <b>Perspective</b><br />
+                \[
+                P_{persp}=\begin{bmatrix}f&0&0&0\\0&f&0&0\\0&0&1&0\\0&0&1&0\end{bmatrix}
+                \]<br />
+                $(x',y')=(fx/z, fy/z)$
+              </div>
+            </div>
+          </section>
+
+          <!-- Pitfalls -->
+          <section class="sheet p-4 mb-4" id="pitfalls">
+            <h2>Common Pitfalls</h2>
+            <ul>
+              <li>Incorrect order ($TSR\neq RTS$).</li>
+              <li>Mixing row/column convention.</li>
+              <li>Omitting homogeneous divide in perspective.</li>
+              <li>Degrees vs radians in code.</li>
+            </ul>
+          </section>
+
+          <!-- Conclusion -->
+          <section class="sheet p-4 mb-4" id="conclusion">
+            <h2>Conclusion</h2>
+            <p>
+              Matrix algebra provides a unified language for motion and camera
+              models. Homogeneous coordinates extend matrices to include
+              translation, while projections (orthographic vs perspective)
+              bridge 3D and 2D, serving different visualization goals.
+            </p>
+          </section>
+
+          <!-- References -->
+          <section class="sheet p-4 mb-4" id="refs">
+            <h2>References (IEEE)</h2>
+            <ol>
+              <li>
+                W. K. Nicholson, <i>Linear Algebra with Applications</i>, 7th
+                ed. McGraw-Hill, 2015.
+              </li>
+              <li>
+                J. D. Foley, A. van Dam, S. K. Feiner, and J. F. Hughes,
+                <i>Computer Graphics: Principles and Practice</i>, 2nd ed.
+                Addison-Wesley, 1996.
+              </li>
+              <li>
+                E. Lengyel,
+                <i>Mathematics for 3D Game Programming and Computer Graphics</i
+                >, 3rd ed., Course Technology, 2011.
+              </li>
+              <li>
+                T. Akenine-Möller, E. Haines, and N. Hoffman,
+                <i>Real-Time Rendering</i>, 4th ed. CRC Press, 2018.
+              </li>
+            </ol>
+          </section>
+
+          <!-- Rubric -->
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
